@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-function Exercise1 () {
-    return (
-        <h1>Hello world</h1>
-    )
+function Exercise1() {
+  return (
+    <h1>Hello world</h1>
+  );
 }
 
-export { Exercise1 } 
+export default Exercise1;
