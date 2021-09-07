@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
+import { getFixedRanges, getRanges } from '../utils/RangesApi';
 
 function Range() {
   const [min, setMin] = React.useState(1);
@@ -16,9 +17,16 @@ function Range() {
   const minValueDragRef = React.useRef(null);
   const maxValueRef = React.useRef(null);
   const maxValueDragRef = React.useRef(null);
-  React.useEffect(() => {
-    minValueRef.current.style.width = `${(currentMin * 100) / max}%`;
-    maxValueRef.current.style.width = `${(currentMax * 100) / max}%`;
+  React.useEffect(async () => {
+    const { min: fetchedMin, max: fetchedMax } = await getRanges();
+    setMin(fetchedMin);
+    setMax(fetchedMax);
+    setCurrentMin(fetchedMin);
+    setCurrentMax(fetchedMax);
+    setLabelMax(fetchedMax);
+    setLabelMin(fetchedMin);
+    minValueRef.current.style.width = `${(fetchedMin * 100) / fetchedMax}%`;
+    maxValueRef.current.style.width = `${(fetchedMax * 100) / fetchedMax}%`;
     setSliderWidth(sliderRef.current.offsetWidth);
     setOffsetSliderWidth(sliderRef.current.offsetLeft);
   }, []);
