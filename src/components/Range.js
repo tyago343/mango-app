@@ -3,9 +3,9 @@
 import React from 'react';
 import { getFixedRanges, getRanges } from '../utils/RangesApi';
 
-function Range() {
-  const [min, setMin] = React.useState(1);
-  const [max, setMax] = React.useState(100);
+function Range({minProp = 1, maxProp = 10, fixedRangeProp}) {
+  const [min, setMin] = React.useState(minProp);
+  const [max, setMax] = React.useState(maxProp);
   const [currentMin, setCurrentMin] = React.useState(min);
   const [currentMax, setCurrentMax] = React.useState(max);
   const [labelMin, setLabelMin] = React.useState(currentMin);
