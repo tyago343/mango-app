@@ -6,10 +6,10 @@ import { getFixedRanges, getRanges } from '../utils/RangesApi';
 function Range({minProp = 1, maxProp = 10, fixedRangeProp}) {
   const [min, setMin] = React.useState(minProp);
   const [max, setMax] = React.useState(maxProp);
-  const [currentMin, setCurrentMin] = React.useState(min);
-  const [currentMax, setCurrentMax] = React.useState(max);
-  const [labelMin, setLabelMin] = React.useState(currentMin);
-  const [labelMax, setLabelMax] = React.useState(currentMax);
+  const [currentMin, setCurrentMin] = React.useState(minProp);
+  const [currentMax, setCurrentMax] = React.useState(maxProp);
+  const [labelMin, setLabelMin] = React.useState(minProp);
+  const [labelMax, setLabelMax] = React.useState(maxProp);
   const [sliderWidth, setSliderWidth] = React.useState(0);
   const [offsetSliderWidth, setOffsetSliderWidth] = React.useState(0);
   const sliderRef = React.useRef(null);
@@ -18,19 +18,11 @@ function Range({minProp = 1, maxProp = 10, fixedRangeProp}) {
   const maxValueRef = React.useRef(null);
   const maxValueDragRef = React.useRef(null);
   React.useEffect(async () => {
-    const { min: fetchedMin, max: fetchedMax } = await getRanges();
-    setMin(fetchedMin);
-    setMax(fetchedMax);
-    setCurrentMin(fetchedMin);
-    setCurrentMax(fetchedMax);
-    setLabelMax(fetchedMax);
-    setLabelMin(fetchedMin);
-    minValueRef.current.style.width = `${(fetchedMin * 100) / fetchedMax}%`;
-    maxValueRef.current.style.width = `${(fetchedMax * 100) / fetchedMax}%`;
+    minValueRef.current.style.width = `${(minProp * 100) / maxProp}%`;
+    maxValueRef.current.style.width = `${(maxProp * 100) / maxProp}%`;
     setSliderWidth(sliderRef.current.offsetWidth);
     setOffsetSliderWidth(sliderRef.current.offsetLeft);
   }, []);
-
   const setMinValue = (e) => {
     const inputMin = e.target.value;
     setLabelMin(inputMin);

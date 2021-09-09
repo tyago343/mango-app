@@ -10,7 +10,7 @@ function Exercise2() {
     setFixedRanges(fixedRanges)
   }, [])
   return (
-    <Range fixedRanges={fixedRanges} />
+    <Range fixedRangeProp={fixedRanges} />
   );
 }
 export default Exercise2;
