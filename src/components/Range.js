@@ -30,7 +30,6 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
     if (inputMin <= currentMin && inputMin < currentMax) {
       return setMin(inputMin);
     }
-    minValueRef.current.style.width = `${0}%`;
     setMin(inputMin);
     setCurrentMin(inputMin);
   };

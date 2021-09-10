@@ -2,57 +2,65 @@ $border-radius: 20px;
 
 $primary: #709fdc;
 $base: #071739;
-$shadow-color:  #274684;
-$lighter-shadow: rgba($shadow-color, .2);
+$shadow-color: #274684;
+$lighter-shadow: rgba($shadow-color, 0.2);
 $white: #fff;
 $gray: #8c8c8c;
-$lighter-gray: rgba($gray, .1);
+$lighter-gray: rgba($gray, 0.1);
 $time-line-width: 240px;
-$transition: .3s all ease;
+$transition: 0.3s all ease;
 
+@mixin grabbing-cursor {
+  cursor: url('https://www.google.com/intl/en_ALL/mapfiles/closedhand.cur'), all-scroll;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: -o-grabbing;
+  cursor: -ms-grabbing;
+  cursor: grabbing;
+}
 @mixin dragIndicator($property, $background, $z-index) {
-  #{$property}{
-      position: absolute;
-      top: 0;
-      z-index: $z-index;
-      width: 0;
-      height: 5px;
-      border-radius: 5px;
-      background: $background;
-      &:hover{
-        &::before{
-          opacity: 1;
-        }
-        &::after{
-          opacity: 1;
-        }
+  #{$property} {
+    position: absolute;
+    top: 0;
+    z-index: $z-index;
+    width: 0;
+    height: 5px;
+    border-radius: 5px;
+    background: $background;
+    &:hover {
+      &::before {
+        opacity: 1;
       }
-      &::before{
-        opacity: 0;
-        content: attr(data-content);
-        display: block;
-        position: absolute;
-        top: -40px;
-        right: -23px;
-        width: 40px;
-        padding: 3px;
-        text-align: center;
-        color: white;
-        background: $shadow-color;
-        border-radius: $border-radius;
+      &::after {
+        opacity: 1;
+      }
     }
-    &::after{
+    &::before {
       opacity: 0;
-      content:'';
+      content: attr(data-content);
+      display: block;
+      position: absolute;
+      top: -40px;
+      right: -23px;
+      width: 40px;
+      padding: 3px;
+      text-align: center;
+      color: white;
+      background: $shadow-color;
+      border-radius: $border-radius;
+    }
+    &::after {
+      opacity: 0;
+      content: '';
       display: block;
       position: absolute;
       top: -18px;
       right: -8px;
       border-top: 8px solid $shadow-color;
-      border-left:8px solid transparent;
-      border-right:8px solid transparent;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
     }
-    #{$property}-drag{
+    #{$property}-drag {
       position: absolute;
       right: -7.5px;
       top: -5px;
@@ -62,15 +70,20 @@ $transition: .3s all ease;
 
       border-radius: 50%;
       background: $base;
-      transition: all .3s;
-      &:hover{
+      transition: all 0.3s;
+      &:hover {
+        width: 17px;
+        height: 17px;
         box-shadow: 0 0 0 6px $lighter-shadow;
+      }
+      &:active {
+        @include grabbing-cursor;
       }
     }
   }
 }
 
-body{
+body {
   font-family: 'Rubik', sans-serif;
   color: $base;
   display: flex;
@@ -78,7 +91,7 @@ body{
   align-items: center;
   flex-direction: column;
   background: $lighter-gray;
-  .card{
+  .card {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -90,31 +103,31 @@ body{
     box-shadow: 0px 0px 20px 0px $lighter-shadow;
     background: $white;
     overflow: hidden;
-    h2{
+    h2 {
       margin-bottom: 40px;
     }
-    .current-value{
+    .current-value {
       width: 100%;
-      
-      label{
+
+      label {
         display: inline-flex;
         width: 50px;
         font-size: 20px;
       }
-      input{
-          margin: 0;
-          max-width: 40px;
-          margin-bottom: 5px;
-          font-size: 16px;
-          color: white;
-          padding: 5px;
-          padding-left: 15px;
-          border: none;
-          border-radius: $border-radius;
-          background: $shadow-color;
-        } 
+      input {
+        margin: 0;
+        max-width: 40px;
+        margin-bottom: 5px;
+        font-size: 16px;
+        color: white;
+        padding: 5px;
+        padding-left: 15px;
+        border: none;
+        border-radius: $border-radius;
+        background: $shadow-color;
+      }
     }
-    .values{
+    .values {
       display: flex;
       justify-content: space-between;
       font-weight: 600;
@@ -122,7 +135,7 @@ body{
       margin-bottom: 10px;
       width: $time-line-width;
     }
-    #slider{
+    #slider {
       position: relative;
       margin: 0 auto;
       width: $time-line-width;
@@ -130,39 +143,37 @@ body{
       background: $primary;
       border-radius: 5px;
       cursor: pointer;
-      
-      @include dragIndicator("#min", $primary, 2);
-      @include dragIndicator("#max", $shadow-color, 1);
+
+      @include dragIndicator('#min', $primary, 2);
+      @include dragIndicator('#max', $shadow-color, 1);
     }
   }
 }
 
-
-.fa-instagram{
+.fa-instagram {
   position: absolute;
   color: $base;
   top: 3%;
   right: 2%;
   font-size: 38px;
 }
-.fa-instagram:hover{
+.fa-instagram:hover {
   font-size: 42px;
   color: $shadow-color;
-  transition: all .1s linear;
+  transition: all 0.1s linear;
   cursor: pointer;
 }
 
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
-input[type="number"] {
-    -moz-appearance: textfield;
+input[type='number'] {
+  -moz-appearance: textfield;
 }
 
-*:focus{
+*:focus {
   outline: none;
   box-shadow: 0 0 0 2px $primary;
 }
