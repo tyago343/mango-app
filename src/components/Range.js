@@ -1,43 +1,47 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import propTypes from 'prop-types';
 
-function Range({minProp = 1, maxProp = 10, fixedRangeProp}) {
-  const [min, setMin] = React.useState(minProp);
-  const [max, setMax] = React.useState(maxProp);
-  const [currentMin, setCurrentMin] = React.useState(minProp);
-  const [currentMax, setCurrentMax] = React.useState(maxProp);
-  const [labelMin, setLabelMin] = React.useState(minProp);
-  const [labelMax, setLabelMax] = React.useState(maxProp);
-  const [sliderWidth, setSliderWidth] = React.useState(0);
-  const [offsetSliderWidth, setOffsetSliderWidth] = React.useState(0);
-  const sliderRef = React.useRef(null);
-  const minValueRef = React.useRef(null);
-  const minValueDragRef = React.useRef(null);
-  const maxValueRef = React.useRef(null);
-  const maxValueDragRef = React.useRef(null);
-  React.useEffect(async () => {
-    minValueRef.current.style.width = `${(minProp * 100) / maxProp}%`;
-    maxValueRef.current.style.width = `${(maxProp * 100) / maxProp}%`;
+function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
+  const [min, setMin] = useState(1);
+  const [max, setMax] = useState(10);
+  const [currentMin, setCurrentMin] = useState(minProp);
+  const [currentMax, setCurrentMax] = useState(maxProp);
+  const [sliderWidth, setSliderWidth] = useState(0);
+  const [offsetSliderWidth, setOffsetSliderWidth] = useState(0);
+  const sliderRef = useRef(null);
+  const minValueRef = useRef(null);
+  const minValueDragRef = useRef(null);
+  const maxValueRef = useRef(null);
+  const maxValueDragRef = useRef(null);
+  useEffect(async () => {
+    setMin(minProp);
+    setMax(maxProp);
+    setCurrentMin(minProp);
+    setCurrentMax(maxProp);
+    minValueRef.current.style.width = `${0}%`;
+    maxValueRef.current.style.width = `${(max * 100) / max}%`;
     setSliderWidth(sliderRef.current.offsetWidth);
     setOffsetSliderWidth(sliderRef.current.offsetLeft);
-  }, []);
+  }, [minProp, maxProp]);
   const setMinValue = (e) => {
     const inputMin = e.target.value;
-    setLabelMin(inputMin);
-    if ((inputMin >= min) && (inputMin < currentMax)) {
-      setCurrentMin(inputMin);
+    if (inputMin <= currentMin && inputMin < currentMax) {
+      return setMin(inputMin);
     }
+    minValueRef.current.style.width = `${0}%`;
+    setMin(inputMin);
+    setCurrentMin(inputMin);
   };
   const onMouseMoveMin = (e) => {
     const dragedWidth = e.clientX - offsetSliderWidth;
-    const dragedWidthInPercent = (dragedWidth * 100) / sliderWidth;
-    const newCurrentMin = (parseInt((max * dragedWidthInPercent) / 100, 10));
-    if ((newCurrentMin >= min) && (newCurrentMin < currentMax)) {
+    const dragedWidthInPercent = ((dragedWidth * 100)) / sliderWidth;
+    const newCurrentMin = parseInt((dragedWidthInPercent * max) / 100, 10);
+    if (newCurrentMin >= min && newCurrentMin < currentMax) {
       minValueRef.current.style.width = `${dragedWidthInPercent}%`;
       minValueRef.current.dataset.content = newCurrentMin;
       setCurrentMin(newCurrentMin);
-      setLabelMin(newCurrentMin);
     }
   };
   const onMouseUpMin = () => {
@@ -56,10 +60,11 @@ function Range({minProp = 1, maxProp = 10, fixedRangeProp}) {
 
   const setMaxValue = (e) => {
     const inputMax = e.target.value;
-    setLabelMax(inputMax);
-    if ((inputMax > currentMin) && (inputMax <= max)) {
-      maxValueRef.current.style.width = `${(inputMax * 100) / max}%`;
-      setCurrentMax(parseInt(inputMax, 10));
+    if (inputMax > currentMin && inputMax >= currentMax) {
+      setMax(inputMax);
+    } else {
+      setMax(inputMax);
+      setCurrentMax(inputMax);
     }
   };
   const onMouseMoveMax = (e) => {
@@ -67,11 +72,10 @@ function Range({minProp = 1, maxProp = 10, fixedRangeProp}) {
     const dragedWidht = e.clientX - offsetSliderWidth;
     const dragedWidhtInPercent = (dragedWidht * 100) / sliderWidth;
     const newCurrentMax = parseInt((max * dragedWidhtInPercent) / 100, 10);
-    if ((newCurrentMax > currentMin) && (newCurrentMax <= max)) {
+    if (newCurrentMax > currentMin && newCurrentMax <= max) {
       maxWalueThumb.current.style.width = `${dragedWidhtInPercent}%`;
       maxWalueThumb.current.dataset.content = newCurrentMax;
       setCurrentMax(newCurrentMax);
-      setLabelMax(newCurrentMax);
     }
   };
   const onMouseUpMax = () => {
@@ -96,7 +100,7 @@ function Range({minProp = 1, maxProp = 10, fixedRangeProp}) {
           id="min-input"
           type="number"
           onChange={setMinValue}
-          value={labelMin}
+          value={min}
           min={min}
           max={currentMax - 1}
         />
@@ -107,30 +111,44 @@ function Range({minProp = 1, maxProp = 10, fixedRangeProp}) {
           id="max-input"
           type="number"
           onChange={setMaxValue}
-          value={labelMax}
+          value={max}
           min={currentMin + 1}
           max={max}
         />
-
       </div>
 
       <div className="values">
-        <div>{ min }</div>
-        <div>{ max }</div>
+        <div>{min}</div>
+        <div>{max}</div>
       </div>
 
       <div ref={sliderRef} id="slider">
-
         <div ref={minValueRef} id="min" data-content={currentMin}>
-
-          <div ref={minValueDragRef} id="min-drag" onMouseDown={changeMinValue} onTouchStart={changeMinValue} />
+          <div
+            ref={minValueDragRef}
+            id="min-drag"
+            onMouseDown={changeMinValue}
+            onTouchStart={changeMinValue}
+          />
         </div>
         <div ref={maxValueRef} id="max" data-content={currentMax}>
-          <div ref={maxValueDragRef} id="max-drag" onMouseDown={changeMaxValue} onTouchStart={changeMaxValue} />
+          <div
+            ref={maxValueDragRef}
+            id="max-drag"
+            onMouseDown={changeMaxValue}
+            onTouchStart={changeMaxValue}
+          />
         </div>
-
       </div>
     </div>
   );
 }
+Range.propTypes = {
+  minProp: propTypes.number.isRequired,
+  maxProp: propTypes.number.isRequired,
+  fixedRangeProp: propTypes.arrayOf(propTypes.number),
+};
+Range.defaultProps = {
+  fixedRangeProp: [],
+};
 export default Range;
