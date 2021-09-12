@@ -26,14 +26,16 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
     setOffsetSliderWidth(sliderRef.current.offsetLeft);
   }, [minProp, maxProp]);
   const setMinValue = (e) => {
-    const inputMin = e.target.value;
-    if (inputMin <= currentMin && inputMin < currentMax) {
-      setMin(inputMin);
-      minValueRef.current.style.width = `${(inputMin * 100) / max}%`;
-    } else {
-      setMin(inputMin);
-      setCurrentMin(inputMin);
-      minValueRef.current.style.width = `${(inputMin * 100) / max}%`;
+    if (!fixedRangeProp.length) {
+      const inputMin = e.target.value;
+      if (inputMin <= currentMin && inputMin < currentMax) {
+        setMin(inputMin);
+        minValueRef.current.style.width = `${(inputMin * 100) / max}%`;
+      } else {
+        setMin(inputMin);
+        setCurrentMin(inputMin);
+        minValueRef.current.style.width = `${(inputMin * 100) / max}%`;
+      }
     }
   };
   const onMouseMoveMin = (e) => {
@@ -69,12 +71,14 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
   };
 
   const setMaxValue = (e) => {
-    const inputMax = e.target.value;
-    if (inputMax > currentMin && inputMax >= currentMax) {
-      setMax(inputMax);
-    } else {
-      setMax(inputMax);
-      setCurrentMax(inputMax);
+    if (!fixedRangeProp.length) {
+      const inputMax = e.target.value;
+      if (inputMax > currentMin && inputMax >= currentMax) {
+        setMax(inputMax);
+      } else {
+        setMax(inputMax);
+        setCurrentMax(inputMax);
+      }
     }
   };
   const onMouseMoveMax = (e) => {
@@ -109,86 +113,81 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
     document.addEventListener('touchmove', onMouseMoveMax);
     document.addEventListener('touchend', onMouseUpMax);
   };
-  return (
-    <div className="card">
-      <div className="current-value">
-        <div>
-          <label htmlFor="min-input">Min: </label>
-          <input
-            id="min-input"
-            type="number"
-            onChange={setMinValue}
-            value={min}
-            min={min}
-            disabled={fixedRangeProp.length}
-            max={currentMax - 1}
-          />
-        </div>
-        <div>
-          <label htmlFor="max-input">Max: </label>
-          <input
-            id="max-input"
-            type="number"
-            onChange={setMaxValue}
-            value={max}
-            min={currentMin + 1}
-            max={max}
-            disabled={fixedRangeProp.length}
-          />
-        </div>
-      </div>
-      <div className="slider-wrapper">
-        <p>
-          {min}
-          {' '}
-          €
-        </p>
-        <div ref={sliderRef} id="slider">
-          <div ref={minValueRef} id="min" data-content={currentMin}>
-            <div
-              ref={minValueDragRef}
-              id="min-drag"
-              onMouseDown={changeMinValue}
-              onTouchStart={changeMinValue}
+  if (min && max) {
+    return (
+      <div className="card">
+        <div className="current-value">
+          <div>
+            <label htmlFor="min-input">Min: </label>
+            <input
+              id="min-input"
+              type="number"
+              onChange={setMinValue}
+              value={min}
+              min={min}
+              disabled={fixedRangeProp.length}
+              max={currentMax - 1}
             />
           </div>
-          <div ref={maxValueRef} id="max" data-content={currentMax}>
-            <div
-              ref={maxValueDragRef}
-              id="max-drag"
-              onMouseDown={changeMaxValue}
-              onTouchStart={changeMaxValue}
+          <div>
+            <label htmlFor="max-input">Max: </label>
+            <input
+              id="max-input"
+              type="number"
+              onChange={setMaxValue}
+              value={max}
+              min={currentMin + 1}
+              max={max}
+              disabled={fixedRangeProp.length}
             />
           </div>
         </div>
-        <p>
-          {max}
-          {' '}
-          €
-        </p>
-      </div>
-      <div className="values">
-        <div>
-          <p>
-            {`Current min: ${currentMin}€`}
+        <div className="slider-wrapper">
+          <p data-testid="min-value">
+            {min}
+            {' '}
+            €
+          </p>
+          <div ref={sliderRef} id="slider" data-testid="slider">
+            <div ref={minValueRef} id="min" data-content={currentMin}>
+              <div
+                ref={minValueDragRef}
+                id="min-drag"
+                onMouseDown={changeMinValue}
+                onTouchStart={changeMinValue}
+              />
+            </div>
+            <div ref={maxValueRef} id="max" data-content={currentMax}>
+              <div
+                ref={maxValueDragRef}
+                id="max-drag"
+                onMouseDown={changeMaxValue}
+                onTouchStart={changeMaxValue}
+              />
+            </div>
+          </div>
+          <p data-testid="max-value">
+            {max}
+            {' '}
+            €
           </p>
         </div>
-        <div>
-          <p>
-            {`Current max: ${currentMax}€`}
-          </p>
+        <div className="values">
+          <div>
+            <p>
+              {`Current min: ${currentMin}€`}
+            </p>
+          </div>
+          <div>
+            <p>
+              {`Current max: ${currentMax}€`}
+            </p>
+          </div>
         </div>
       </div>
-
-    </div>
-  );
+    );
+  }
+  return (<p data-testid="error">Cannot use Range component without min and max values</p>);
 }
-Range.propTypes = {
-  minProp: propTypes.number.isRequired,
-  maxProp: propTypes.number.isRequired,
-  fixedRangeProp: propTypes.arrayOf(propTypes.number),
-};
-Range.defaultProps = {
-  fixedRangeProp: [],
-};
+
 export default Range;
