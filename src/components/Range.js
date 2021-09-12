@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect, useState, useRef } from 'react';
-import propTypes from 'prop-types';
 
 function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
   const [min, setMin] = useState(1);
