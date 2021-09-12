@@ -1,5 +1,5 @@
 async function getRanges() {
-  return window.fetch('http://demo2057032.mockable.io/get-ranges')
+  return window.fetch('https://demo2057032.mockable.io/get-ranges')
     .then(async (response) => {
       const data = await response;
       if (response.ok) {
@@ -10,7 +10,7 @@ async function getRanges() {
     });
 }
 async function getFixedRanges() {
-  return window.fetch('http://demo2057032.mockable.io/get-fixed-ranges')
+  return window.fetch('https://demo2057032.mockable.io/get-fixed-ranges')
     .then(async (response) => {
       const data = await response;
       if (response.ok) {
