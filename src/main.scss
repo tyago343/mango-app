@@ -7,7 +7,7 @@ $lighter-shadow: rgba($shadow-color, 0.2);
 $white: #fff;
 $gray: #8c8c8c;
 $lighter-gray: rgba($gray, 0.1);
-$time-line-width: 240px;
+$time-line-width: 300px;
 $transition: 0.3s all ease;
 
 @mixin grabbing-cursor {
@@ -108,9 +108,11 @@ body {
     }
     .current-value {
       width: 100%;
-
+      display: flex;
+      margin-bottom: 30px;
+      justify-content: space-between;
       label {
-        display: inline-flex;
+        display: block;
         width: 50px;
         font-size: 20px;
       }
@@ -133,7 +135,10 @@ body {
       font-weight: 600;
       margin-top: 30px;
       margin-bottom: 10px;
-      width: $time-line-width;
+      width: $time-line-width + 20px;
+      div p {
+        font-weight: 400;
+      }
     }
     #slider {
       position: relative;
@@ -150,19 +155,6 @@ body {
   }
 }
 
-.fa-instagram {
-  position: absolute;
-  color: $base;
-  top: 3%;
-  right: 2%;
-  font-size: 38px;
-}
-.fa-instagram:hover {
-  font-size: 42px;
-  color: $shadow-color;
-  transition: all 0.1s linear;
-  cursor: pointer;
-}
 
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {

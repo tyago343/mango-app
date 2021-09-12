@@ -20,7 +20,7 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
     setMax(maxProp);
     setCurrentMin(minProp);
     setCurrentMax(maxProp);
-    minValueRef.current.style.width = `${0}%`;
+    minValueRef.current.style.width = `${(min * 100) / max}%`;
     maxValueRef.current.style.width = `${(max * 100) / max}%`;
     setSliderWidth(sliderRef.current.offsetWidth);
     setOffsetSliderWidth(sliderRef.current.offsetLeft);
@@ -28,15 +28,18 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
   const setMinValue = (e) => {
     const inputMin = e.target.value;
     if (inputMin <= currentMin && inputMin < currentMax) {
-      return setMin(inputMin);
+      setMin(inputMin);
+      minValueRef.current.style.width = `${(inputMin * 100) / max}%`;
+    } else {
+      setMin(inputMin);
+      setCurrentMin(inputMin);
+      minValueRef.current.style.width = `${(inputMin * 100) / max}%`;
     }
-    setMin(inputMin);
-    setCurrentMin(inputMin);
   };
   const onMouseMoveMin = (e) => {
     const dragedWidth = e.clientX - offsetSliderWidth;
     const dragedWidthInPercent = ((dragedWidth * 100)) / sliderWidth;
-    const newCurrentMin = parseInt((dragedWidthInPercent * max) / 100, 10);
+    const newCurrentMin = parseInt(((dragedWidthInPercent * max) / 100), 10);
     if (newCurrentMin >= min && newCurrentMin < currentMax) {
       minValueRef.current.style.width = `${dragedWidthInPercent}%`;
       minValueRef.current.dataset.content = newCurrentMin;
@@ -92,35 +95,30 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
   };
   return (
     <div className="card">
-      <h2>Double range slider</h2>
       <div className="current-value">
-        <label htmlFor="min-input">Min: </label>
-        <input
-          id="min-input"
-          type="number"
-          onChange={setMinValue}
-          value={min}
-          min={min}
-          max={currentMax - 1}
-        />
-
-        <br />
-        <label htmlFor="max-input">Max: </label>
-        <input
-          id="max-input"
-          type="number"
-          onChange={setMaxValue}
-          value={max}
-          min={currentMin + 1}
-          max={max}
-        />
+        <div>
+          <label htmlFor="min-input">Min: </label>
+          <input
+            id="min-input"
+            type="number"
+            onChange={setMinValue}
+            value={min}
+            min={min}
+            max={currentMax - 1}
+          />
+        </div>
+        <div>
+          <label htmlFor="max-input">Max: </label>
+          <input
+            id="max-input"
+            type="number"
+            onChange={setMaxValue}
+            value={max}
+            min={currentMin + 1}
+            max={max}
+          />
+        </div>
       </div>
-
-      <div className="values">
-        <div>{min}</div>
-        <div>{max}</div>
-      </div>
-
       <div ref={sliderRef} id="slider">
         <div ref={minValueRef} id="min" data-content={currentMin}>
           <div
@@ -138,7 +136,21 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
             onTouchStart={changeMaxValue}
           />
         </div>
+
       </div>
+      <div className="values">
+        <div>
+          <p>
+            {`Current min: ${currentMin}€`}
+          </p>
+        </div>
+        <div>
+          <p>
+            {`Current max: ${currentMax}€`}
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }
