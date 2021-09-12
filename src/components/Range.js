@@ -19,11 +19,15 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
     setMax(maxProp);
     setCurrentMin(minProp);
     setCurrentMax(maxProp);
-    minValueRef.current.style.width = `${(min * 100) / max}%`;
-    maxValueRef.current.style.width = `${(max * 100) / max}%`;
-    setSliderWidth(sliderRef.current.offsetWidth);
-    setOffsetSliderWidth(sliderRef.current.offsetLeft);
   }, [minProp, maxProp]);
+  useEffect(() => {
+    if (minValueRef.current) {
+      minValueRef.current.style.width = `${(min * 100) / max}%`;
+      maxValueRef.current.style.width = `${(max * 100) / max}%`;
+      setSliderWidth(sliderRef.current.offsetWidth);
+      setOffsetSliderWidth(sliderRef.current.offsetLeft);
+    }
+  }, [min, max]);
   const setMinValue = (e) => {
     if (!fixedRangeProp.length) {
       const inputMin = e.target.value;
