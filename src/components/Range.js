@@ -41,9 +41,17 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
     const dragedWidthInPercent = ((dragedWidth * 100)) / sliderWidth;
     const newCurrentMin = parseInt(((dragedWidthInPercent * max) / 100), 10);
     if (newCurrentMin >= min && newCurrentMin < currentMax) {
-      minValueRef.current.style.width = `${dragedWidthInPercent}%`;
-      minValueRef.current.dataset.content = newCurrentMin;
-      setCurrentMin(newCurrentMin);
+      if (fixedRangeProp.length) {
+        if (fixedRangeProp.includes(newCurrentMin)) {
+          minValueRef.current.style.width = `${dragedWidthInPercent}%`;
+          minValueRef.current.dataset.content = newCurrentMin;
+          setCurrentMin(newCurrentMin);
+        }
+      } else {
+        minValueRef.current.style.width = `${dragedWidthInPercent}%`;
+        minValueRef.current.dataset.content = newCurrentMin;
+        setCurrentMin(newCurrentMin);
+      }
     }
   };
   const onMouseUpMin = () => {
@@ -75,9 +83,17 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
     const dragedWidhtInPercent = (dragedWidht * 100) / sliderWidth;
     const newCurrentMax = parseInt((max * dragedWidhtInPercent) / 100, 10);
     if (newCurrentMax > currentMin && newCurrentMax <= max) {
-      maxWalueThumb.current.style.width = `${dragedWidhtInPercent}%`;
-      maxWalueThumb.current.dataset.content = newCurrentMax;
-      setCurrentMax(newCurrentMax);
+      if (fixedRangeProp.length) {
+        if (fixedRangeProp.includes(newCurrentMax)) {
+          maxWalueThumb.current.style.width = `${dragedWidhtInPercent}%`;
+          maxWalueThumb.current.dataset.content = newCurrentMax;
+          setCurrentMax(newCurrentMax);
+        }
+      } else {
+        maxWalueThumb.current.style.width = `${dragedWidhtInPercent}%`;
+        maxWalueThumb.current.dataset.content = newCurrentMax;
+        setCurrentMax(newCurrentMax);
+      }
     }
   };
   const onMouseUpMax = () => {
@@ -104,6 +120,7 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
             onChange={setMinValue}
             value={min}
             min={min}
+            disabled={fixedRangeProp.length}
             max={currentMax - 1}
           />
         </div>
@@ -116,6 +133,7 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
             value={max}
             min={currentMin + 1}
             max={max}
+            disabled={fixedRangeProp.length}
           />
         </div>
       </div>
