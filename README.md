@@ -10,12 +10,8 @@
 ## 📝 Table of Contents
 
 - [Getting Started](#getting_started)
-- [Usage](#usage)
-- [Built Using](#built_using)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
+- [Tests](#test)
 - [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
