@@ -133,11 +133,23 @@ body {
       display: flex;
       justify-content: space-between;
       font-weight: 600;
-      margin-top: 30px;
+      margin-top: 10px;
       margin-bottom: 10px;
       width: $time-line-width + 20px;
       div p {
         font-weight: 400;
+      }
+    }
+    .slider-wrapper {
+      display: flex;
+      align-items: center;
+      > p {
+        &:first-child {
+          margin-right: 10px;
+        }
+        &:last-child {
+          margin-left: 10px;
+        }
       }
     }
     #slider {

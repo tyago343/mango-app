@@ -137,24 +137,35 @@ function Range({ minProp = 1, maxProp = 10, fixedRangeProp = [] }) {
           />
         </div>
       </div>
-      <div ref={sliderRef} id="slider">
-        <div ref={minValueRef} id="min" data-content={currentMin}>
-          <div
-            ref={minValueDragRef}
-            id="min-drag"
-            onMouseDown={changeMinValue}
-            onTouchStart={changeMinValue}
-          />
+      <div className="slider-wrapper">
+        <p>
+          {min}
+          {' '}
+          €
+        </p>
+        <div ref={sliderRef} id="slider">
+          <div ref={minValueRef} id="min" data-content={currentMin}>
+            <div
+              ref={minValueDragRef}
+              id="min-drag"
+              onMouseDown={changeMinValue}
+              onTouchStart={changeMinValue}
+            />
+          </div>
+          <div ref={maxValueRef} id="max" data-content={currentMax}>
+            <div
+              ref={maxValueDragRef}
+              id="max-drag"
+              onMouseDown={changeMaxValue}
+              onTouchStart={changeMaxValue}
+            />
+          </div>
         </div>
-        <div ref={maxValueRef} id="max" data-content={currentMax}>
-          <div
-            ref={maxValueDragRef}
-            id="max-drag"
-            onMouseDown={changeMaxValue}
-            onTouchStart={changeMaxValue}
-          />
-        </div>
-
+        <p>
+          {max}
+          {' '}
+          €
+        </p>
       </div>
       <div className="values">
         <div>
